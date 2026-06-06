@@ -1,0 +1,21 @@
+# Render Blueprint — Learn With Husnain Frontend
+# React 19 + Vite SPA, deployed as a static site (global CDN, auto TLS).
+#
+# Custom domain: learnwithhusnain.com  (add it under the static site's Settings → Custom Domains)
+# VITE_API_URL is inlined at BUILD time, so it must point at the backend's HTTPS URL
+# before you build. After adding the custom API domain, trigger "Clear build cache & deploy".
+
+services:
+  - type: web
+    name: lms-fe
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    autoDeploy: true
+    envVars:
+      - key: VITE_API_URL # backend API base (HTTPS)
+        value: https://api.learnwithhusnain.com
+    routes:
+      - type: rewrite # SPA routing: every path serves index.html
+        source: /*
+        destination: /index.html
