@@ -25,9 +25,14 @@ const EyeIcon = ({ onClick, show }: { onClick: () => void; show: boolean }) => (
   </span>
 );
 
+const PK_PHONE = /^(?:\+92|0092|92|0)?3\d{9}$/;
+
 const validationSchema = Yup.object().shape({
   userName: Yup.string().required("User Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
+  phoneNumber: Yup.string()
+    .required("Phone number is required")
+    .matches(PK_PHONE, "Enter a valid Pakistani phone number (e.g. 03001234567)"),
   password: Yup.string()
     .min(8, "Minimum 8 characters")
     .required("Password is required"),
@@ -54,6 +59,7 @@ const AddStudentModal: React.FC<AddStudentModalProps> = ({
         initialValues={{
           userName: "",
           email: "",
+          phoneNumber: "",
           role: "student",
           password: "",
         }}
@@ -93,6 +99,20 @@ const AddStudentModal: React.FC<AddStudentModalProps> = ({
                 />
                 {touched.email && errors.email && (
                   <div className="text-danger">{errors.email}</div>
+                )}
+              </Form.Group>
+              <Form.Group className="mb-3 position-relative">
+                <Form.Label>
+                  Phone Number <span className="text-danger">*</span>
+                </Form.Label>
+                <Field
+                  name="phoneNumber"
+                  className="form-control"
+                  type="tel"
+                  placeholder="03001234567"
+                />
+                {touched.phoneNumber && errors.phoneNumber && (
+                  <div className="text-danger">{errors.phoneNumber}</div>
                 )}
               </Form.Group>
               <Form.Group className="mb-3 position-relative">
